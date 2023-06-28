@@ -21,7 +21,9 @@ export default {
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [],
+    plugins: [
+        { src: '~/plugins/vue-cookies', ssr: false },
+    ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -36,13 +38,27 @@ export default {
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
-        // https://go.nuxtjs.dev/bootstrap
-        'bootstrap-vue/nuxt',
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        // https://go.nuxtjs.dev/bootstrap
+        'bootstrap-vue/nuxt',
         // https://go.nuxtjs.dev/pwa
         '@nuxtjs/pwa',
+        '@nuxtjs/auth',
+        'cookie-universal-nuxt',
     ],
+
+    auth: {
+        strategies: {
+            local: {
+                endpoints: {
+                    login: { url: '/login', method: 'post' },
+                    // login: {url: '/login', method: 'post'},
+                    // login: {url: '/login', method: 'post'}
+                }
+            }
+        }
+    },
 
     bootstrapVue: {
         // Add the icon plugin to the `componentsPlugins` array
@@ -52,7 +68,7 @@ export default {
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-        baseURL: '/',
+        baseURL: 'http://localhost:8000',
     },
 
     // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -63,13 +79,27 @@ export default {
     },
     router: {
         extendRoutes(routes, resolve) {
-            routes.push({
-                path: '/admin',
-                components: {
-                    default: resolve(__dirname, 'components/Tutorial.vue'), // or routes[index].component
-                },
+            routes.push(
+                {
+                    path: '/admin',
+                    components: {
+                        default: resolve(__dirname, 'components/Tutorial.vue'), // or routes[index].component
+                    },
 
-            })
+                },
+                {
+                    path: '/login',
+                    components: {
+                        default: resolve(__dirname, 'components/admin/AdminLogin.vue'), // or routes[index].component
+                    },
+                },
+                {
+                    path: '/register',
+                    components: {
+                        default: resolve(__dirname, 'components/admin/AdminRegister.vue'), // or routes[index].component
+                    },
+                }
+            )
         }
     },
 

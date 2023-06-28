@@ -14,5 +14,8 @@ export default {
             title: 'Tutorial',
         }
     },
+    beforeCreate() {
+        console.log('12312')
+    },
 }
 </script>
